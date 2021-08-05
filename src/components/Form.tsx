@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Dispatch } from 'react';
-import { NewQuestion } from '../App';
+import { useApp } from '../context/AppContext';
 import { shuffleArray } from '../util';
 import { StyledForm } from './Form.styles';
 
@@ -19,13 +18,8 @@ interface IState {
     type: string;
 }
 
-interface IProps {
-    setQuestions: Dispatch<NewQuestion[]>;
-    setStart: Dispatch<boolean>;
-    setGameOver: Dispatch<boolean>;
-}
-
-const Form: React.FC<IProps> = ({ setQuestions, setStart, setGameOver }) => {
+const Form: React.FC = () => {
+    const state = useApp();
     const [input, setInput] = useState<IState>({
         amount: '10',
         difficulty: 'easy',
@@ -62,9 +56,7 @@ const Form: React.FC<IProps> = ({ setQuestions, setStart, setGameOver }) => {
             };
         });
 
-        setQuestions(questions);
-        setGameOver(false);
-        setStart(true);
+        state?.dispatch({ type: 'GET_QUESTIONS', payload: questions });
     };
 
     return (
